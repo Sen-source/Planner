@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Planner</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div id="dynamic-bg"></div>
+    <div id="bg-overlay"></div>
+
+    <header>
+        <h1>My Planner</h1>
+        <div class="header-actions">
+            <button id="download-btn" style="margin:0; padding: 10px 20px;">Download PNG</button>
+        </div>
+    </header>
+
+    <div class="app-content">
+        <!-- Sidebar Controls -->
+        <aside>
+            <div id="form-container">
+                <h2 id="form-title">Add Schedule</h2>
+                <div class="control-group">
+                    <label>SUBJECT</label>
+                    <input type="text" id="subject" placeholder="e.g. Subject">
+                </div>
+                <div class="control-group">
+                    <label>DAYS</label>
+                    <div id="day-checkboxes" class="day-selector">
+                        <label class="day-check"><input type="checkbox" value="0"><span>M</span></label>
+                        <label class="day-check"><input type="checkbox" value="1"><span>T</span></label>
+                        <label class="day-check"><input type="checkbox" value="2"><span>W</span></label>
+                        <label class="day-check"><input type="checkbox" value="3"><span>TH</span></label>
+                        <label class="day-check"><input type="checkbox" value="4"><span>F</span></label>
+                        <label class="day-check"><input type="checkbox" value="5"><span>S</span></label>
+                        <label class="day-check"><input type="checkbox" value="6"><span>S</span></label>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;" class="control-group">
+                    <div>
+                        <label>START</label>
+                        <input type="time" id="startTime" value="09:00">
+                    </div>
+                    <div>
+                        <label>END</label>
+                        <input type="time" id="endTime" value="10:00">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>COLOR</label>
+                    <div class="color-picker-container">
+                        <div class="color-grid" id="color-picker">
+                            <!-- Colors will be injected by JS -->
+                        </div>
+                        <input type="color" id="custom-color" value="#ffffff" title="Pick custom color">
+                    </div>
+                </div>
+                <button id="submit-btn">Add to Schedule</button>
+                <button id="cancel-btn" class="secondary" style="display:none;">Cancel Edit</button>
+            </div>
+
+            <hr style="margin: 25px 0; border: none; border-top: 1px solid rgba(0,0,0,0.05);">
+
+            <div class="customization">
+                <h2>Customization</h2>
+                <div class="control-group">
+                    <label>BACKGROUND COLOR</label>
+                    <input type="color" id="bgColorPicker">
+                </div>
+                <div class="control-group">
+                    <label>UPLOAD IMAGE</label>
+                    <input type="file" id="bgImageInput" accept="image/*">
+                </div>
+                <div class="control-group">
+                    <label>OVERLAY BLUR</label>
+                    <input type="range" id="blurInput" min="0" max="20" value="10">
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Calendar -->
+        <main id="planner-capture">
+            <div class="calendar-header">
+                <div class="day-label"></div> <!-- Time column spacer -->
+                <div class="day-label">MON</div>
+                <div class="day-label">TUE</div>
+                <div class="day-label">WED</div>
+                <div class="day-label">THU</div>
+                <div class="day-label">FRI</div>
+                <div class="day-label">SAT</div>
+                <div class="day-label">SUN</div>
+            </div>
+            <div class="calendar-body">
+                <div class="time-grid" id="calendar-grid">
+                    <!-- Time labels and grid cells will be injected here -->
+                </div>
+                <!-- Schedule blocks will be positioned absolutely here -->
+                <div id="schedule-layer" style="position: absolute; top: 0; left: 60px; right: 0; bottom: 0; pointer-events: none;">
+                    <div id="day-columns-container" style="display: grid; grid-template-columns: repeat(7, 1fr); height: 100%; pointer-events: none;">
+                        <div class="day-column" data-day="0" style="pointer-events: auto;"></div>
+                        <div class="day-column" data-day="1" style="pointer-events: auto;"></div>
+                        <div class="day-column" data-day="2" style="pointer-events: auto;"></div>
+                        <div class="day-column" data-day="3" style="pointer-events: auto;"></div>
+                        <div class="day-column" data-day="4" style="pointer-events: auto;"></div>
+                        <div class="day-column" data-day="5" style="pointer-events: auto;"></div>
+                        <div class="day-column" data-day="6" style="pointer-events: auto;"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Deletion Confirmation -->
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal">
+            <h2 style="margin-bottom: 15px;">Delete Schedule?</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 25px;">Are you sure you want to remove this schedule block?</p>
+            <div style="display: flex; gap: 10px;">
+                <button class="secondary" onclick="closeModal('delete-modal')" style="margin:0; flex:1;">Cancel</button>
+                <button onclick="confirmDelete()" style="margin:0; flex:1; background: #FF3B30;">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
